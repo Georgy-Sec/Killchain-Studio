@@ -1,0 +1,115 @@
+{
+    "low_priv": [
+        {
+            "id": "l_10",
+            "type": "custom",
+            "desc": "\ud83c\udf10 Net Domain & DC Discovery",
+            "cmd_index": 34,
+            "user_vals": {
+                "Param": "CORP.LOCAL"
+            },
+            "info": {
+                "CommandID": "2100",
+                "NetCommand": "5",
+                "Param": "CORP.LOCAL"
+            },
+            "regexes": [
+                {
+                    "regex": "DC:\\s*([A-Za-z0-9\\-\\.]+)",
+                    "var_name": "dc_host"
+                }
+            ],
+            "x": 50,
+            "y": 60,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        },
+        {
+            "id": "l_11",
+            "type": "custom",
+            "desc": "\ud83c\udf10 Net Sessions on {dc_host}",
+            "cmd_index": 32,
+            "user_vals": {
+                "Param": "{dc_host}"
+            },
+            "info": {
+                "CommandID": "2100",
+                "NetCommand": "3",
+                "Param": "{dc_host}"
+            },
+            "x": 50,
+            "y": 210,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        },
+        {
+            "id": "l_12",
+            "type": "custom",
+            "desc": "\ud83d\udd11 Token Privilege Enable (SeDebugPrivilege)",
+            "cmd_index": 26,
+            "user_vals": {
+                "_priv_name": "SeDebugPrivilege"
+            },
+            "info": {
+                "CommandID": "40",
+                "SubCommand": "privs-get",
+                "Arguments": "SeDebugPrivilege"
+            },
+            "x": 50,
+            "y": 360,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        }
+    ],
+    "system": [
+        {
+            "id": "s_10",
+            "type": "custom",
+            "desc": "\ud83d\udd0c Pivot SMB Named Pipe \u2192 \\\\{dc_host}\\pipe\\mojo",
+            "cmd_index": 53,
+            "user_vals": {
+                "_pipe": "\\\\{dc_host}\\pipe\\mojo"
+            },
+            "info": {
+                "CommandID": "2520",
+                "Command": "10",
+                "Param": "\\\\{dc_host}\\pipe\\mojo"
+            },
+            "x": 430,
+            "y": 60,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        },
+        {
+            "id": "s_11",
+            "type": "custom",
+            "desc": "\ud83c\udf0d SOCKS5 Proxy Add (Port 1080)",
+            "cmd_index": 60,
+            "user_vals": {
+                "_port": "1080"
+            },
+            "info": {
+                "CommandID": "2540",
+                "Command": "socks add",
+                "Params": "1080"
+            },
+            "x": 430,
+            "y": 210,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        }
+    ],
+    "dependencies": [
+        {
+            "source_id": "l_10",
+            "source_step": "\ud83c\udf10 Net Domain & DC Discovery",
+            "regex": "DC:\\s*([A-Za-z0-9\\-\\.]+)",
+            "var_name": "dc_host"
+        }
+    ]
+}

